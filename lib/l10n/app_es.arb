@@ -1,0 +1,35 @@
+{
+  "appTitle": "Simulador de Modulación Digital",
+  "enterMessage": "Ingrese Mensaje",
+  "messageHint": "Escriba un mensaje para modular (ej: \"Hola\")",
+  "modulationType": "Tipo de Modulación",
+  "stepByStepMode": "Modo Paso a Paso",
+  "simulate": "Simular",
+  "previous": "Anterior",
+  "next": "Siguiente",
+  "reset": "Reiniciar",
+  "binaryRepresentation": "Representación Binaria:",
+  "signalVisualization": "Visualización de la Señal:",
+  "about": "Acerca de {modulationType}",
+  "@about": {
+    "placeholders": {
+      "modulationType": {}
+    }
+  },
+  "currentBit": "Bit actual:",
+  "currentDibit": "Dibit actual:",
+  "phase": "Fase:",
+  "bitToPhaseMapping": "Mapeo de Bit a Fase:",
+  "dibitToPhaseMapping": "Mapeo de Dibit a Fase:",
+  "advantages": "Ventajas:",
+  "disadvantages": "Desventajas:",
+  "bpsk_advantage1": "Simple de implementar y demodular",
+  "bpsk_advantage2": "Más robusta contra el ruido",
+  "bpsk_advantage3": "Menos propensa a errores en canales ruidosos",
+  "bpsk_disadvantage1": "Baja eficiencia espectral (1 bit por símbolo)",
+  "qpsk_advantage1": "El doble de eficiencia espectral que BPSK (2 bits por símbolo)",
+  "qpsk_advantage2": "Misma tasa de error que BPSK para la misma energía por bit",
+  "qpsk_disadvantage1": "Implementación y demodulación más complejas",
+  "qpsk_disadvantage2": "Más sensible al ruido de fase y distorsión",
+  "changeLanguage": "Cambiar Idioma"
+} 
