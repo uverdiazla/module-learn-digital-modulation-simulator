@@ -49,6 +49,15 @@ dependencies:
   
   # For generating unique IDs
   uuid: ^4.4.0
+  
+  # For audio playback
+  just_audio: ^0.9.31
+  audio_waveforms: ^1.0.4
+  path_provider: ^2.1.2
+  permission_handler: ^11.3.0
+  
+  # For audio recording
+  record: ^4.4.4
 
   # For web support
   flutter_web_plugins:
@@ -74,7 +83,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-  generate: true  # Habilitar la generación de archivos l10n
+  generate: true  # Enable l10n file generation
 
   # To add assets to your application, add an assets section, like this:
   # assets:

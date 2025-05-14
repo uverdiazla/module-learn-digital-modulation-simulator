@@ -126,6 +126,63 @@ class _ModulationScreenState extends State<ModulationScreen> {
               ),
             ),
             SizedBox(height: isMobile ? 8.0 : 16.0),
+            
+            // Show information about the audio source if available
+            if (provider.isFromAudio) ...[
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .secondaryContainer
+                      .withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(8.0),
+                  border: Border.all(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .secondary
+                        .withOpacity(0.5),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.music_note),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Audio recording data",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: isMobile ? 12 : 14,
+                            ),
+                          ),
+                          Text(
+                            "${provider.audioSource} - ${provider.audioTimestamp}",
+                            style: TextStyle(
+                              fontSize: isMobile ? 11 : 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, size: 18),
+                      onPressed: () {
+                        // Clear audio information and data
+                        provider.reset();
+                        _textController.clear();
+                      },
+                      tooltip: "Clear audio data",
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: isMobile ? 8.0 : 16.0),
+            ],
+            
             TextField(
               controller: _textController,
               decoration: InputDecoration(
@@ -138,7 +195,8 @@ class _ModulationScreenState extends State<ModulationScreen> {
                 fontSize: PlatformUtils.isWeb ? 14 : (isMobile ? 14 : 16),
               ),
               maxLines: 1,
-              onChanged: provider.setInputText,
+              onChanged: provider.isFromAudio ? null : provider.setInputText,
+              enabled: !provider.isFromAudio, // Disable when coming from audio
             ),
             SizedBox(height: isMobile ? 8.0 : 16.0),
             DropdownButtonFormField<ModulationType>(

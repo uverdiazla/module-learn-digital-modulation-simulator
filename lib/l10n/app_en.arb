@@ -127,5 +127,36 @@
   "original": "Original",
   "demodulated": "Demodulated",
   "errors": "Errors",
-  "showComparison": "Show Comparison"
+  "showComparison": "Show Comparison",
+
+  "audioTab": "Audio",
+  "modulationTab": "Modulation",
+  "audioScreen": "Audio Recording",
+  "newRecording": "New Recording",
+  "recording": "Recording...",
+  "noRecordings": "No recordings yet",
+  "recording_number": "Recording {number}",
+  "@recording_number": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+  "duration": "Duration: {duration}",
+  "@duration": {
+    "placeholders": {
+      "duration": {}
+    }
+  },
+  "startRecording": "Press the button to start recording",
+  "recordingControls": "Recording Controls",
+  "useForModulation": "Use for modulation",
+  "selectModulationType": "Select modulation type",
+  "deleteRecording": "Delete Recording",
+  "deleteRecordingConfirmation": "Are you sure you want to delete this recording? This action cannot be undone.",
+  "clearAllRecordings": "Clear All Recordings",
+  "clearAllRecordingsConfirmation": "Are you sure you want to delete all recordings? This action cannot be undone.",
+  
+  "maxDuration": "Maximum Duration",
+  "seconds": "seconds",
+  "timeRemaining": "Time Remaining"
 }

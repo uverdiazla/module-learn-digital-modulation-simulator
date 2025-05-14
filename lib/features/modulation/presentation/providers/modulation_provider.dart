@@ -16,6 +16,10 @@ class ModulationProvider extends ChangeNotifier {
   ModulationType _modulationType = ModulationType.bpsk;
   bool _stepByStepMode = false;
   int _currentStep = 0;
+  
+  // Information about the audio source
+  String? _audioSource;
+  String? _audioTimestamp;
 
   // Output results
   ModulatedSignal? _modulatedSignal;
@@ -27,6 +31,11 @@ class ModulationProvider extends ChangeNotifier {
   int get currentStep => _currentStep;
   ModulatedSignal? get modulatedSignal => _modulatedSignal;
   bool get hasResult => _modulatedSignal != null;
+  
+  // Getters for audio information
+  String? get audioSource => _audioSource;
+  String? get audioTimestamp => _audioTimestamp;
+  bool get isFromAudio => _audioSource != null;
 
   // Set the history provider
   void setHistoryProvider(HistoryProvider provider) {
@@ -37,6 +46,23 @@ class ModulationProvider extends ChangeNotifier {
   void setInputText(String text) {
     _inputText = text;
     _resetStepByStep();
+    notifyListeners();
+  }
+  
+  // Update text and mark it as coming from an audio recording
+  void setInputTextFromAudio(String text,
+      {required String recordingId, required String timestamp}) {
+    _inputText = text;
+    _audioSource = "Recording #$recordingId";
+    _audioTimestamp = timestamp;
+    _resetStepByStep();
+    notifyListeners();
+  }
+
+  // Clear audio source information
+  void clearAudioSource() {
+    _audioSource = null;
+    _audioTimestamp = null;
     notifyListeners();
   }
 
@@ -122,6 +148,8 @@ class ModulationProvider extends ChangeNotifier {
     _stepByStepMode = false;
     _currentStep = 0;
     _modulatedSignal = null;
+    _audioSource = null;
+    _audioTimestamp = null;
     notifyListeners();
   }
   

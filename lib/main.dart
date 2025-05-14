@@ -4,9 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:modulearn/core/theme/app_theme.dart';
 import 'package:modulearn/core/theme/theme_provider.dart';
 import 'package:modulearn/core/theme/locale_provider.dart';
+import 'package:modulearn/features/modulation/presentation/providers/audio_provider.dart';
 import 'package:modulearn/features/modulation/presentation/providers/history_provider.dart';
 import 'package:modulearn/features/modulation/presentation/providers/modulation_provider.dart';
+import 'package:modulearn/features/modulation/presentation/screens/audio_screen.dart';
 import 'package:modulearn/features/modulation/presentation/screens/modulation_screen.dart';
+import 'package:modulearn/features/modulation/presentation/screens/history_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:modulearn/core/utils/platform_utils.dart';
 
@@ -34,6 +37,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => ModulationProvider()),
         ChangeNotifierProvider(create: (_) => HistoryProvider()),
+        ChangeNotifierProvider(create: (_) => AudioProvider()),
       ],
       child: Consumer2<ThemeProvider, LocaleProvider>(
         builder: (context, themeProvider, localeProvider, _) {
@@ -54,9 +58,74 @@ class MyApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: LocaleProvider.supportedLocales,
-            home: const ModulationScreen(),
+            home: AppNavigation(key: AppNavigationState.navigationKey),
           );
         },
+      ),
+    );
+  }
+}
+
+class AppNavigation extends StatefulWidget {
+  const AppNavigation({super.key});
+
+  @override
+  State<AppNavigation> createState() => AppNavigationState();
+}
+
+// Exposing this class for the navigation service
+class AppNavigationState extends State<AppNavigation> {
+  int _selectedIndex = 0;
+
+  // Método para permitir cambiar la pestaña activa desde fuera
+  static final GlobalKey<AppNavigationState> navigationKey =
+      GlobalKey<AppNavigationState>();
+
+  void switchToTab(int index) {
+    if (index >= 0 && index < 2) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    // Define screens based on platform
+    final List<Widget> screens = [
+      const ModulationScreen(),
+      PlatformUtils.isWeb ? const HistoryScreen() : const AudioScreen(),
+    ];
+
+    // Get bottom navigation items based on platform
+    final List<BottomNavigationBarItem> navItems = [
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.tune),
+        label: l10n.modulationTab,
+      ),
+      PlatformUtils.isWeb
+          ? BottomNavigationBarItem(
+              icon: const Icon(Icons.history),
+              label: l10n.history,
+            )
+          : BottomNavigationBarItem(
+              icon: const Icon(Icons.mic),
+              label: l10n.audioTab,
+            ),
+    ];
+
+    return Scaffold(
+      body: screens[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        items: navItems,
       ),
     );
   }
