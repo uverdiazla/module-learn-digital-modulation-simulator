@@ -31,5 +31,7 @@
   "qpsk_advantage2": "Misma tasa de error que BPSK para la misma energía por bit",
   "qpsk_disadvantage1": "Implementación y demodulación más complejas",
   "qpsk_disadvantage2": "Más sensible al ruido de fase y distorsión",
-  "changeLanguage": "Cambiar Idioma"
+  "changeLanguage": "Cambiar Idioma",
+  "bpsk_description": "Modulación por Desplazamiento de Fase Binaria - Utiliza 2 estados de fase (0° y 180°) para representar los bits 0 y 1",
+  "qpsk_description": "Modulación por Desplazamiento de Fase en Cuadratura - Utiliza 4 estados de fase (0°, 90°, 180°, 270°) para representar 2 bits por símbolo"
 } 

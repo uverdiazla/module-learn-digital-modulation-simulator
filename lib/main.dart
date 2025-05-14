@@ -7,8 +7,18 @@ import 'package:modulearn/core/theme/locale_provider.dart';
 import 'package:modulearn/features/modulation/presentation/providers/modulation_provider.dart';
 import 'package:modulearn/features/modulation/presentation/screens/modulation_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:modulearn/core/utils/platform_utils.dart';
 
+// Handle web platform issues
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize any platform-specific settings
+  if (PlatformUtils.isAndroid) {
+    // Android-specific initializations would go here
+    // The flutter_displaymode package would be used here if needed
+  }
+
   runApp(const MyApp());
 }
 

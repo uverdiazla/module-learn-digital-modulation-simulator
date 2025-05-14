@@ -121,6 +121,20 @@ class SignalChart extends StatelessWidget {
     final points = signal.generateXYPoints(samplePoints);
     List<FlSpot> spots = [];
 
+    // Handle the case where we have no points
+    if (points.isEmpty) {
+      // Return a flat line at y=0
+      return LineChartBarData(
+        spots: [FlSpot(0, 0), FlSpot(1, 0)],
+        isCurved: false,
+        color: signalColor,
+        barWidth: 2,
+        isStrokeCapRound: false,
+        dotData: const FlDotData(show: false),
+        belowBarData: BarAreaData(show: false),
+      );
+    }
+
     for (var point in points) {
       spots.add(FlSpot(point[0], point[1]));
     }

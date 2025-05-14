@@ -31,5 +31,7 @@
   "qpsk_advantage2": "Same error rate as BPSK for the same energy per bit",
   "qpsk_disadvantage1": "More complex implementation and demodulation",
   "qpsk_disadvantage2": "More sensitive to phase noise and distortion",
-  "changeLanguage": "Change Language"
+  "changeLanguage": "Change Language",
+  "bpsk_description": "Binary Phase Shift Keying - Uses 2 phase states (0° and 180°) to represent binary 0 and 1",
+  "qpsk_description": "Quadrature Phase Shift Keying - Uses 4 phase states (0°, 90°, 180°, 270°) to represent 2 bits per symbol"
 }

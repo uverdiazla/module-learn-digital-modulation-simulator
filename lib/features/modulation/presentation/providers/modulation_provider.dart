@@ -53,11 +53,20 @@ class ModulationProvider extends ChangeNotifier {
     if (_inputText.isEmpty) return;
 
     if (_stepByStepMode) {
-      _modulatedSignal = _repository.generateStepByStepModulatedSignal(
-        text: _inputText,
-        modulationType: _modulationType,
-        currentStep: _currentStep,
-      );
+      // For the initial step, ensure we have a valid but empty signal
+      if (_currentStep == 0) {
+        _modulatedSignal = _repository.generateStepByStepModulatedSignal(
+          text: _inputText,
+          modulationType: _modulationType,
+          currentStep: 0,
+        );
+      } else {
+        _modulatedSignal = _repository.generateStepByStepModulatedSignal(
+          text: _inputText,
+          modulationType: _modulationType,
+          currentStep: _currentStep,
+        );
+      }
     } else {
       _modulatedSignal = _repository.generateModulatedSignal(
         text: _inputText,

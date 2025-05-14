@@ -2,6 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
+  // Helper function to create input decoration theme
+  static InputDecorationTheme _createInputDecorationTheme() {
+    return InputDecorationTheme(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      isDense: true,
+    );
+  }
+  
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
@@ -28,12 +38,7 @@ class AppTheme {
         borderRadius: BorderRadius.circular(12),
       ),
     ),
-    inputDecorationTheme: InputDecorationTheme(
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-    ),
+    inputDecorationTheme: _createInputDecorationTheme(),
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -62,11 +67,6 @@ class AppTheme {
         borderRadius: BorderRadius.circular(12),
       ),
     ),
-    inputDecorationTheme: InputDecorationTheme(
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-    ),
+    inputDecorationTheme: _createInputDecorationTheme(),
   );
 }

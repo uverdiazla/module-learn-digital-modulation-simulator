@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:modulearn/core/theme/theme_provider.dart';
 import 'package:modulearn/core/theme/locale_provider.dart';
+import 'package:modulearn/core/utils/platform_utils.dart';
+import 'package:modulearn/core/utils/responsive_utils.dart';
 import 'package:modulearn/features/modulation/domain/entities/modulation_type.dart';
 import 'package:modulearn/features/modulation/presentation/providers/modulation_provider.dart';
 import 'package:modulearn/features/modulation/presentation/widgets/binary_display.dart';
@@ -54,17 +56,24 @@ class _ModulationScreenState extends State<ModulationScreen> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildInputSection(modulationProvider, l10n),
-            const SizedBox(height: 24),
-            _buildControls(modulationProvider, l10n),
-            const SizedBox(height: 24),
-            if (modulationProvider.hasResult) ...[
-              _buildResultSection(modulationProvider, l10n),
-            ],
-          ],
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: ResponsiveUtils.isLargeScreen(context) ? 1200 : 900,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildInputSection(modulationProvider, l10n),
+                const SizedBox(height: 24),
+                _buildControls(modulationProvider, l10n),
+                const SizedBox(height: 24),
+                if (modulationProvider.hasResult) ...[
+                  _buildResultSection(modulationProvider, l10n),
+                ],
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -93,6 +102,10 @@ class _ModulationScreenState extends State<ModulationScreen> {
                 hintText: l10n.messageHint,
                 border: const OutlineInputBorder(),
                 prefixIcon: const Icon(Icons.edit),
+                contentPadding: ResponsiveUtils.getInputPadding(context),
+              ),
+              style: TextStyle(
+                fontSize: PlatformUtils.isWeb ? 14 : 16,
               ),
               maxLines: 1,
               onChanged: provider.setInputText,
@@ -103,6 +116,7 @@ class _ModulationScreenState extends State<ModulationScreen> {
                 labelText: l10n.modulationType,
                 border: const OutlineInputBorder(),
                 prefixIcon: const Icon(Icons.tune),
+                contentPadding: ResponsiveUtils.getInputPadding(context),
               ),
               value: provider.modulationType,
               items: ModulationType.values.map((type) {

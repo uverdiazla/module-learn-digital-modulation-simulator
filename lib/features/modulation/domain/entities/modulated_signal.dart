@@ -31,6 +31,11 @@ class ModulatedSignal {
 
     final samplesPerSymbolActual = totalSamples ~/ symbolCount;
 
+    // Add additional check to prevent division by zero
+    if (samplesPerSymbolActual <= 0) {
+      return List.filled(totalSamples, 0.0);
+    }
+
     for (int symbolIndex = 0; symbolIndex < symbolCount; symbolIndex++) {
       final phase = phases[symbolIndex];
       final amplitude = amplitudes[symbolIndex];
@@ -56,14 +61,23 @@ class ModulatedSignal {
       return [];
     }
 
+    // Special case for single point to avoid division by zero
     if (yPoints.length == 1) {
       return [
         [0.0, yPoints[0]]
       ];
     }
 
-    for (int i = 0; i < yPoints.length; i++) {
-      final x = i / (yPoints.length - 1);
+    // Ensure we have at least two points to calculate proper x intervals
+    final pointCount = yPoints.length;
+    if (pointCount < 2) {
+      return [
+        [0.0, 0.0]
+      ];
+    }
+
+    for (int i = 0; i < pointCount; i++) {
+      final x = i / (pointCount - 1);
       points.add([x, yPoints[i]]);
     }
 

@@ -36,7 +36,9 @@ class ModulationInfoCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            Text(modulationType.description),
+            Text(modulationType == ModulationType.bpsk
+                ? l10n.bpsk_description
+                : l10n.qpsk_description),
             const SizedBox(height: 12),
             _buildDetailsSection(),
           ],

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:modulearn/core/utils/platform_utils.dart';
+import 'package:modulearn/core/utils/responsive_utils.dart';
 import 'package:modulearn/features/modulation/domain/entities/modulation_type.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -43,33 +45,43 @@ class BinaryDisplay extends StatelessWidget {
       elevation: 2,
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(PlatformUtils.isWeb ? 12.0 : 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               l10n.binaryRepresentation,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontSize: PlatformUtils.isWeb ? 14 : 16,
               ),
             ),
-            const SizedBox(height: 8),
-            _buildBinaryText(cleanBinary, processedBits),
-            if (stepByStepMode) _buildStepInfo(cleanBinary, processedBits),
+            SizedBox(height: PlatformUtils.isWeb ? 6 : 8),
+            _buildBinaryText(cleanBinary, processedBits, context),
+            if (stepByStepMode)
+              _buildStepInfo(cleanBinary, processedBits, context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildBinaryText(String binary, int processedBits) {
+  Widget _buildBinaryText(
+      String binary, int processedBits, BuildContext context) {
     List<Widget> binaryChars = [];
+    
+    // Determine font size based on platform and screen size
+    final double fontSize = PlatformUtils.isWeb
+        ? (ResponsiveUtils.isSmallScreen(context) ? 12 : 14)
+        : 16;
+
+    // Adjust spacing for better display on web
+    final double spacing = PlatformUtils.isWeb ? 1 : 2;
 
     for (int i = 0; i < binary.length; i++) {
       // Add a space every 8 bits (byte)
       if (i > 0 && i % 8 == 0) {
-        binaryChars.add(const Text(' ', style: TextStyle(letterSpacing: 2)));
+        binaryChars.add(Text(' ', style: TextStyle(letterSpacing: spacing)));
       }
 
       // Determine if this bit is processed in the current step
@@ -90,19 +102,21 @@ class BinaryDisplay extends StatelessWidget {
                 : Colors.grey,
             fontWeight:
                 isCurrentlyProcessing ? FontWeight.bold : FontWeight.normal,
-            fontSize: 16,
+            fontSize: fontSize,
           ),
         ),
       );
     }
 
-    return Wrap(
-      spacing: 2,
-      children: binaryChars
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Wrap(spacing: spacing, children: binaryChars
+      ),
     );
   }
 
-  Widget _buildStepInfo(String binary, int processedBits) {
+  Widget _buildStepInfo(
+      String binary, int processedBits, BuildContext context) {
     if (!stepByStepMode || processedBits <= 0) {
       return const SizedBox.shrink();
     }
@@ -146,30 +160,49 @@ class BinaryDisplay extends StatelessWidget {
       }
     }
 
+    // More compact spacing on web
+    final double topPadding = PlatformUtils.isWeb ? 12.0 : 16.0;
+    final double fontSize = PlatformUtils.isWeb ? 13.0 : 14.0;
+
     return Padding(
-      padding: const EdgeInsets.only(top: 16.0),
-      child: Row(
+      padding: EdgeInsets.only(top: topPadding),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 4,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           Text(
             modulationType == ModulationType.bpsk
                 ? l10n.currentBit
                 : l10n.currentDibit,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: fontSize,
+            ),
           ),
           Text(
             currentBits,
-            style:
-                const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
+              fontSize: fontSize,
+            ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 8),
           Text(
             '${l10n.phase} ',
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: fontSize,
+            ),
           ),
           Text(
             phaseInfo,
-            style: const TextStyle(
-                color: Colors.blue, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: Colors.blue,
+              fontWeight: FontWeight.bold,
+              fontSize: fontSize,
+            ),
           ),
         ],
       ),
