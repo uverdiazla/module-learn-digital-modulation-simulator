@@ -28,10 +28,11 @@ class BinaryDisplay extends StatelessWidget {
     // Calculate how many bits are processed in the current step
     int processedBits = 0;
     if (stepByStepMode) {
-      if (modulationType == ModulationType.bpsk) {
-        processedBits = currentStep;
-      } else if (modulationType == ModulationType.qpsk) {
+      if (modulationType == ModulationType.qpsk) {
         processedBits = currentStep * 2;
+      } else {
+        // BPSK, ASK, FSK process one bit at a time
+        processedBits = currentStep;
       }
 
       if (processedBits > cleanBinary.length) {
@@ -88,10 +89,15 @@ class BinaryDisplay extends StatelessWidget {
       final bool isProcessed = i < processedBits;
 
       // For QPSK, highlight pairs of bits
-      final bool isCurrentlyProcessing = stepByStepMode &&
-          ((modulationType == ModulationType.bpsk && i == processedBits - 1) ||
-              (modulationType == ModulationType.qpsk &&
-                  (i == processedBits - 1 || i == processedBits - 2)));
+      final bool isCurrentlyProcessing;
+
+      if (modulationType == ModulationType.qpsk) {
+        isCurrentlyProcessing = stepByStepMode &&
+            (i == processedBits - 1 || i == processedBits - 2);
+      } else {
+        // For BPSK, ASK, FSK - just highlight the current bit
+        isCurrentlyProcessing = stepByStepMode && i == processedBits - 1;
+      }
 
       binaryChars.add(
         Text(
@@ -110,8 +116,7 @@ class BinaryDisplay extends StatelessWidget {
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Wrap(spacing: spacing, children: binaryChars
-      ),
+      child: Wrap(spacing: spacing, children: binaryChars),
     );
   }
 
@@ -122,14 +127,29 @@ class BinaryDisplay extends StatelessWidget {
     }
 
     String currentBits;
-    String phaseInfo;
+    String paramValue;
+    String paramName;
+
+    // Get parameter name based on modulation type
+    switch (modulationType) {
+      case ModulationType.bpsk:
+      case ModulationType.qpsk:
+        paramName = l10n.phase;
+        break;
+      case ModulationType.ask:
+        paramName = l10n.amplitude;
+        break;
+      case ModulationType.fsk:
+        paramName = l10n.frequency;
+        break;
+    }
 
     if (modulationType == ModulationType.bpsk) {
       // Get the last processed bit
       final bit = binary[processedBits - 1];
       currentBits = bit;
-      phaseInfo = bit == '0' ? '0°' : '180°';
-    } else {
+      paramValue = bit == '0' ? '0°' : '180°';
+    } else if (modulationType == ModulationType.qpsk) {
       // Get the last processed pair of bits for QPSK
       final int startIndex =
           (processedBits % 2 == 0) ? processedBits - 2 : processedBits - 1;
@@ -144,20 +164,30 @@ class BinaryDisplay extends StatelessWidget {
       // Determine the phase based on the dibit
       switch (dibit) {
         case '00':
-          phaseInfo = '45°';
+          paramValue = '45°';
           break;
         case '01':
-          phaseInfo = '135°';
+          paramValue = '135°';
           break;
         case '10':
-          phaseInfo = '225°';
+          paramValue = '225°';
           break;
         case '11':
-          phaseInfo = '315°';
+          paramValue = '315°';
           break;
         default:
-          phaseInfo = 'N/A';
+          paramValue = 'N/A';
       }
+    } else if (modulationType == ModulationType.ask) {
+      // ASK: bit 0 = low amplitude, bit 1 = high amplitude
+      final bit = binary[processedBits - 1];
+      currentBits = bit;
+      paramValue = bit == '0' ? '0.2A' : '1.0A';
+    } else {
+      // FSK: bit 0 = low frequency, bit 1 = high frequency
+      final bit = binary[processedBits - 1];
+      currentBits = bit;
+      paramValue = bit == '0' ? '0.5f' : '2.0f';
     }
 
     // More compact spacing on web
@@ -172,9 +202,9 @@ class BinaryDisplay extends StatelessWidget {
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           Text(
-            modulationType == ModulationType.bpsk
-                ? l10n.currentBit
-                : l10n.currentDibit,
+            modulationType == ModulationType.qpsk
+                ? l10n.currentDibit
+                : l10n.currentBit,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: fontSize,
@@ -190,14 +220,14 @@ class BinaryDisplay extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Text(
-            '${l10n.phase} ',
+            '$paramName ',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: fontSize,
             ),
           ),
           Text(
-            phaseInfo,
+            paramValue,
             style: TextStyle(
               color: Colors.blue,
               fontWeight: FontWeight.bold,

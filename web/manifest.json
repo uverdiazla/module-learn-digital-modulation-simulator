@@ -1,11 +1,11 @@
 {
-    "name": "modulearn",
-    "short_name": "modulearn",
+    "name": "ModuLearn",
+    "short_name": "ModuLearn",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Simulador de Modulación Digital para fines educativos.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -7,8 +7,9 @@ class ModulatedSignal {
   final ModulationType modulationType;
   final List<double> phases;
   final List<double> amplitudes;
+  final List<double> frequencies;
   final int samplesPerSymbol;
-  final double frequency;
+  final double baseFrequency;
 
   ModulatedSignal({
     required this.originalText,
@@ -16,8 +17,9 @@ class ModulatedSignal {
     required this.modulationType,
     required this.phases,
     required this.amplitudes,
+    this.frequencies = const [],
     this.samplesPerSymbol = 16,
-    this.frequency = 1.0,
+    this.baseFrequency = 1.0,
   });
 
   /// Generates a list of y-values for the modulated signal
@@ -36,6 +38,25 @@ class ModulatedSignal {
       return List.filled(totalSamples, 0.0);
     }
 
+    switch (modulationType) {
+      case ModulationType.bpsk:
+      case ModulationType.qpsk:
+        return _generatePSKSignalPoints(
+            totalSamples, samplesPerSymbolActual, symbolCount);
+      case ModulationType.ask:
+        return _generateASKSignalPoints(
+            totalSamples, samplesPerSymbolActual, symbolCount);
+      case ModulationType.fsk:
+        return _generateFSKSignalPoints(
+            totalSamples, samplesPerSymbolActual, symbolCount);
+    }
+  }
+
+  /// Generates PSK (Phase Shift Keying) signal points
+  List<double> _generatePSKSignalPoints(
+      int totalSamples, int samplesPerSymbolActual, int symbolCount) {
+    List<double> signalPoints = [];
+
     for (int symbolIndex = 0; symbolIndex < symbolCount; symbolIndex++) {
       final phase = phases[symbolIndex];
       final amplitude = amplitudes[symbolIndex];
@@ -44,7 +65,52 @@ class ModulatedSignal {
         final t = sample / samplesPerSymbolActual;
         // Generate sinusoidal wave with the given phase and amplitude
         final y = amplitude *
-            math.sin(2 * math.pi * frequency * t + phase * math.pi / 180);
+            math.sin(2 * math.pi * baseFrequency * t + phase * math.pi / 180);
+        signalPoints.add(y);
+      }
+    }
+
+    return signalPoints;
+  }
+
+  /// Generates ASK (Amplitude Shift Keying) signal points
+  List<double> _generateASKSignalPoints(
+      int totalSamples, int samplesPerSymbolActual, int symbolCount) {
+    List<double> signalPoints = [];
+
+    for (int symbolIndex = 0; symbolIndex < symbolCount; symbolIndex++) {
+      final amplitude = amplitudes[symbolIndex];
+
+      for (int sample = 0; sample < samplesPerSymbolActual; sample++) {
+        final t = sample / samplesPerSymbolActual;
+        // Generate sinusoidal wave with varying amplitude
+        final y = amplitude * math.sin(2 * math.pi * baseFrequency * t);
+        signalPoints.add(y);
+      }
+    }
+
+    return signalPoints;
+  }
+
+  /// Generates FSK (Frequency Shift Keying) signal points
+  List<double> _generateFSKSignalPoints(
+      int totalSamples, int samplesPerSymbolActual, int symbolCount) {
+    List<double> signalPoints = [];
+
+    if (frequencies.isEmpty || frequencies.length != symbolCount) {
+      // Fallback if frequencies not provided
+      return _generatePSKSignalPoints(
+          totalSamples, samplesPerSymbolActual, symbolCount);
+    }
+
+    for (int symbolIndex = 0; symbolIndex < symbolCount; symbolIndex++) {
+      final frequency = frequencies[symbolIndex];
+      final amplitude = amplitudes[symbolIndex];
+
+      for (int sample = 0; sample < samplesPerSymbolActual; sample++) {
+        final t = sample / samplesPerSymbolActual;
+        // Generate sinusoidal wave with varying frequency
+        final y = amplitude * math.sin(2 * math.pi * frequency * t);
         signalPoints.add(y);
       }
     }

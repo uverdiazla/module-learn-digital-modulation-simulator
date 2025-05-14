@@ -38,7 +38,11 @@ class ModulationInfoCard extends StatelessWidget {
             const SizedBox(height: 16),
             Text(modulationType == ModulationType.bpsk
                 ? l10n.bpsk_description
-                : l10n.qpsk_description),
+                : modulationType == ModulationType.qpsk
+                    ? l10n.qpsk_description
+                    : modulationType == ModulationType.ask
+                        ? l10n.ask_description
+                        : l10n.fsk_description),
             const SizedBox(height: 12),
             _buildDetailsSection(),
           ],
@@ -53,8 +57,10 @@ class ModulationInfoCard extends StatelessWidget {
         return _buildBpskDetails();
       case ModulationType.qpsk:
         return _buildQpskDetails();
-      default:
-        return const SizedBox.shrink();
+      case ModulationType.ask:
+        return _buildAskDetails();
+      case ModulationType.fsk:
+        return _buildFskDetails();
     }
   }
 
@@ -126,7 +132,72 @@ class ModulationInfoCard extends StatelessWidget {
     );
   }
 
-  Widget _buildMappingRow(String bits, String phase) {
+  Widget _buildAskDetails() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.bitToAmplitudeMapping,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        _buildMappingRow('0', '0.2A'),
+        const SizedBox(height: 4),
+        _buildMappingRow('1', '1.0A'),
+        const SizedBox(height: 12),
+        Text(
+          l10n.advantages,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        _buildBulletPoint(l10n.ask_advantage1),
+        _buildBulletPoint(l10n.ask_advantage2),
+        const SizedBox(height: 12),
+        Text(
+          l10n.disadvantages,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        _buildBulletPoint(l10n.ask_disadvantage1),
+        _buildBulletPoint(l10n.ask_disadvantage2),
+      ],
+    );
+  }
+
+  Widget _buildFskDetails() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.bitToFrequencyMapping,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        _buildMappingRow('0', '0.5f'),
+        const SizedBox(height: 4),
+        _buildMappingRow('1', '2.0f'),
+        const SizedBox(height: 12),
+        Text(
+          l10n.advantages,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        _buildBulletPoint(l10n.fsk_advantage1),
+        _buildBulletPoint(l10n.fsk_advantage2),
+        _buildBulletPoint(l10n.fsk_advantage3),
+        const SizedBox(height: 12),
+        Text(
+          l10n.disadvantages,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        _buildBulletPoint(l10n.fsk_disadvantage1),
+        _buildBulletPoint(l10n.fsk_disadvantage2),
+      ],
+    );
+  }
+
+  Widget _buildMappingRow(String bits, String value) {
     return Row(
       children: [
         Container(
@@ -154,7 +225,7 @@ class ModulationInfoCard extends StatelessWidget {
           ),
           alignment: Alignment.center,
           child: Text(
-            phase,
+            value,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),

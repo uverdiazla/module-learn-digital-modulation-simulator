@@ -35,8 +35,10 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer2<ThemeProvider, LocaleProvider>(
         builder: (context, themeProvider, localeProvider, _) {
+          // We need to get localized title, but context.l10n isn't available yet
+          // The app title will be localized in the MaterialApp's title, and in the AppBar
           return MaterialApp(
-            title: 'Digital Modulation Simulator',
+            title: 'ModuLearn', // Simple title for the window/tab
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,

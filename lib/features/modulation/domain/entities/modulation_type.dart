@@ -8,6 +8,16 @@ enum ModulationType {
     name: 'QPSK',
     descriptionKey: 'qpsk_description',
     bitsPerSymbol: 2,
+  ),
+  ask(
+    name: 'ASK',
+    descriptionKey: 'ask_description',
+    bitsPerSymbol: 1,
+  ),
+  fsk(
+    name: 'FSK',
+    descriptionKey: 'fsk_description',
+    bitsPerSymbol: 1,
   );
 
   final String name;
