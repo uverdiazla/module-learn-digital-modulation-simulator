@@ -48,5 +48,84 @@
   "bpsk_description": "Modulación por Desplazamiento de Fase Binaria - Utiliza 2 estados de fase (0° y 180°) para representar los bits 0 y 1",
   "qpsk_description": "Modulación por Desplazamiento de Fase en Cuadratura - Utiliza 4 estados de fase (0°, 90°, 180°, 270°) para representar 2 bits por símbolo",
   "ask_description": "Modulación por Desplazamiento de Amplitud - Utiliza diferentes niveles de amplitud para representar datos binarios, típicamente amplitud cero para el bit 0 y no cero para el bit 1",
-  "fsk_description": "Modulación por Desplazamiento de Frecuencia - Utiliza diferentes niveles de frecuencia para representar datos binarios, típicamente frecuencia baja para el bit 0 y alta para el bit 1"
+  "fsk_description": "Modulación por Desplazamiento de Frecuencia - Utiliza diferentes niveles de frecuencia para representar datos binarios, típicamente frecuencia baja para el bit 0 y alta para el bit 1",
+  
+  "history": "Historial",
+  "historyEmpty": "No hay historial de modulación aún",
+  "historyEntry": "{timestamp} - {text} ({type})",
+  "@historyEntry": {
+    "placeholders": {
+      "timestamp": {},
+      "text": {},
+      "type": {}
+    }
+  },
+  "saveToHistory": "Guardar en Historial",
+  "deleteHistory": "Borrar Historial",
+  "confirmDeleteHistory": "¿Está seguro que desea borrar todo el historial?",
+  "yes": "Sí",
+  "no": "No",
+  "cancel": "Cancelar",
+  
+  "demodulation": "Demodulación",
+  "demodulationTitle": "Demodulación de Señal",
+  "noiseLevel": "Nivel de Ruido",
+  "noiseDescription": "Agregar ruido simula condiciones de transmisión del mundo real",
+  "demodulate": "Demodular",
+  "originalMessage": "Mensaje Original",
+  "demodulatedMessage": "Mensaje Demodulado",
+  "accuracy": "Precisión",
+  "noiseImpact": "Impacto del Ruido",
+  "errorRate": "Tasa de Error: {rate}%",
+  "@errorRate": {
+    "placeholders": {
+      "rate": {}
+    }
+  },
+  
+  "transmissionProcess": "Proceso de Transmisión",
+  "modulation": "Modulación",
+  "transmission": "Transmisión",
+  "receivedSignal": "Señal Recibida",
+  "viewHistory": "Ver Historial",
+  "transmissionChannel": "Canal de Transmisión",
+  "channelNoise": "Ruido del Canal",
+  "lowNoise": "Bajo",
+  "mediumNoise": "Medio",
+  "highNoise": "Alto",
+  "extremeNoise": "Extremo",
+
+  "historyTitle": "Historial de Modulación",
+  "noHistoryEntries": "No hay entradas en el historial aún. Module una señal y guárdela en el historial.",
+  "selectHistoryEntry": "Seleccione una entrada del historial para ver detalles",
+  "clearAllHistory": "Borrar Todo el Historial",
+  "clearAllHistoryConfirmation": "¿Está seguro que desea borrar todas las entradas del historial? Esta acción no se puede deshacer.",
+  "delete": "Eliminar",
+  "clear": "Borrar",
+  "deleteEntry": "Eliminar Entrada",
+  "deleteEntryConfirmation": "¿Está seguro que desea eliminar esta entrada?",
+  "originalText": "Texto Original",
+  "timestamp": "Marca de Tiempo",
+  "demodulatedText": "Texto Demodulado",
+
+  "demodulationStepByStep": "Demodulación Paso a Paso",
+  "demodulationProgress": "Progreso de Demodulación: {progress}%",
+  "@demodulationProgress": {
+    "placeholders": {
+      "progress": {}
+    }
+  },
+  "demodulationComplete": "Demodulación Completa",
+  "demodulationStep": "Paso {current} de {total}",
+  "@demodulationStep": {
+    "placeholders": {
+      "current": {},
+      "total": {}
+    }
+  },
+  "characterComparison": "Comparación de Caracteres",
+  "original": "Original",
+  "demodulated": "Demodulado",
+  "errors": "Errores",
+  "showComparison": "Mostrar Comparación"
 } 

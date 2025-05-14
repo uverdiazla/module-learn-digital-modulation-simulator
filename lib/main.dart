@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:modulearn/core/theme/app_theme.dart';
 import 'package:modulearn/core/theme/theme_provider.dart';
 import 'package:modulearn/core/theme/locale_provider.dart';
+import 'package:modulearn/features/modulation/presentation/providers/history_provider.dart';
 import 'package:modulearn/features/modulation/presentation/providers/modulation_provider.dart';
 import 'package:modulearn/features/modulation/presentation/screens/modulation_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => ModulationProvider()),
+        ChangeNotifierProvider(create: (_) => HistoryProvider()),
       ],
       child: Consumer2<ThemeProvider, LocaleProvider>(
         builder: (context, themeProvider, localeProvider, _) {

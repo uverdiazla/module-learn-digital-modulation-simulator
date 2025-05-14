@@ -5,7 +5,9 @@ import 'package:modulearn/core/theme/locale_provider.dart';
 import 'package:modulearn/core/utils/platform_utils.dart';
 import 'package:modulearn/core/utils/responsive_utils.dart';
 import 'package:modulearn/features/modulation/domain/entities/modulation_type.dart';
+import 'package:modulearn/features/modulation/presentation/providers/history_provider.dart';
 import 'package:modulearn/features/modulation/presentation/providers/modulation_provider.dart';
+import 'package:modulearn/features/modulation/presentation/screens/history_screen.dart';
 import 'package:modulearn/features/modulation/presentation/widgets/binary_display.dart';
 import 'package:modulearn/features/modulation/presentation/widgets/modulation_info_card.dart';
 import 'package:modulearn/features/modulation/presentation/widgets/signal_chart.dart';
@@ -22,6 +24,19 @@ class _ModulationScreenState extends State<ModulationScreen> {
   final TextEditingController _textController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    // Connect the modulation provider with the history provider
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final modulationProvider =
+          Provider.of<ModulationProvider>(context, listen: false);
+      final historyProvider =
+          Provider.of<HistoryProvider>(context, listen: false);
+      modulationProvider.setHistoryProvider(historyProvider);
+    });
+  }
+
+  @override
   void dispose() {
     _textController.dispose();
     super.dispose();
@@ -34,10 +49,22 @@ class _ModulationScreenState extends State<ModulationScreen> {
     final localeProvider = Provider.of<LocaleProvider>(context);
     final l10n = AppLocalizations.of(context)!;
 
+    // Detectar si estamos en un dispositivo móvil
+    final isMobile = MediaQuery.of(context).size.width < 600;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.appTitle),
         actions: [
+          // History button
+          IconButton(
+            icon: const Icon(Icons.history),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const HistoryScreen()),
+            ),
+            tooltip: l10n.history,
+          ),
           // Language toggle button
           IconButton(
             icon: const Icon(Icons.language),
@@ -55,21 +82,24 @@ class _ModulationScreenState extends State<ModulationScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(isMobile ? 8.0 : 16.0),
         child: Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxWidth: ResponsiveUtils.isLargeScreen(context) ? 1200 : 900,
+              // Ajustar el ancho máximo basado en el tamaño de pantalla
+              maxWidth: ResponsiveUtils.isLargeScreen(context)
+                  ? 1200
+                  : (isMobile ? MediaQuery.of(context).size.width : 900),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildInputSection(modulationProvider, l10n),
-                const SizedBox(height: 24),
+                _buildInputSection(modulationProvider, l10n, isMobile),
+                SizedBox(height: isMobile ? 16 : 24),
                 _buildControls(modulationProvider, l10n),
-                const SizedBox(height: 24),
+                SizedBox(height: isMobile ? 16 : 24),
                 if (modulationProvider.hasResult) ...[
-                  _buildResultSection(modulationProvider, l10n),
+                  _buildResultSection(modulationProvider, l10n, isMobile),
                 ],
               ],
             ),
@@ -80,22 +110,22 @@ class _ModulationScreenState extends State<ModulationScreen> {
   }
 
   Widget _buildInputSection(
-      ModulationProvider provider, AppLocalizations l10n) {
+      ModulationProvider provider, AppLocalizations l10n, bool isMobile) {
     return Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(isMobile ? 8.0 : 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               l10n.enterMessage,
-              style: const TextStyle(
-                fontSize: 18,
+              style: TextStyle(
+                fontSize: isMobile ? 16 : 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: isMobile ? 8.0 : 16.0),
             TextField(
               controller: _textController,
               decoration: InputDecoration(
@@ -105,12 +135,12 @@ class _ModulationScreenState extends State<ModulationScreen> {
                 contentPadding: ResponsiveUtils.getInputPadding(context),
               ),
               style: TextStyle(
-                fontSize: PlatformUtils.isWeb ? 14 : 16,
+                fontSize: PlatformUtils.isWeb ? 14 : (isMobile ? 14 : 16),
               ),
               maxLines: 1,
               onChanged: provider.setInputText,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: isMobile ? 8.0 : 16.0),
             DropdownButtonFormField<ModulationType>(
               decoration: InputDecoration(
                 labelText: l10n.modulationType,
@@ -131,7 +161,7 @@ class _ModulationScreenState extends State<ModulationScreen> {
                 }
               },
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: isMobile ? 8.0 : 16.0),
             Row(
               children: [
                 Text(l10n.stepByStepMode),
@@ -159,8 +189,11 @@ class _ModulationScreenState extends State<ModulationScreen> {
           : (binaryLength + 1) ~/ 2;
     }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    // Usar Wrap en lugar de Row para que los elementos se ajusten en pantallas pequeñas
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 16, // Espacio horizontal entre widgets
+      runSpacing: 16, // Espacio vertical entre líneas
       children: [
         if (!provider.stepByStepMode || !provider.hasResult)
           ElevatedButton.icon(
@@ -190,7 +223,6 @@ class _ModulationScreenState extends State<ModulationScreen> {
               ),
             ],
           ),
-        const SizedBox(width: 16),
         ElevatedButton.icon(
           icon: const Icon(Icons.restart_alt),
           label: Text(l10n.reset),
@@ -199,12 +231,18 @@ class _ModulationScreenState extends State<ModulationScreen> {
             _textController.clear();
           },
         ),
+        if (provider.hasResult)
+          ElevatedButton.icon(
+            icon: const Icon(Icons.save),
+            label: Text(l10n.saveToHistory),
+            onPressed: provider.saveToHistory,
+          ),
       ],
     );
   }
 
   Widget _buildResultSection(
-      ModulationProvider provider, AppLocalizations l10n) {
+      ModulationProvider provider, AppLocalizations l10n, bool isMobile) {
     final signal = provider.modulatedSignal!;
 
     return Column(
@@ -222,14 +260,14 @@ class _ModulationScreenState extends State<ModulationScreen> {
         // Signal chart
         Text(
           l10n.signalVisualization,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 16,
+            fontSize: isMobile ? 14 : 16,
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: isMobile ? 4 : 8),
         SizedBox(
-          height: 300,
+          height: isMobile ? 200 : 300,
           child: SignalChart(
             signal: signal,
             showSymbolBoundaries: true,

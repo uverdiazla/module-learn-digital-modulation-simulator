@@ -3,9 +3,13 @@ import 'package:modulearn/features/modulation/data/models/modulation_repository_
 import 'package:modulearn/features/modulation/domain/entities/modulated_signal.dart';
 import 'package:modulearn/features/modulation/domain/entities/modulation_type.dart';
 import 'package:modulearn/features/modulation/domain/repositories/modulation_repository.dart';
+import 'package:modulearn/features/modulation/presentation/providers/history_provider.dart';
 
 class ModulationProvider extends ChangeNotifier {
   final ModulationRepository _repository = ModulationRepositoryImpl();
+  
+  // Reference to HistoryProvider to avoid circular dependencies
+  HistoryProvider? _historyProvider;
 
   // Input parameters
   String _inputText = '';
@@ -23,6 +27,11 @@ class ModulationProvider extends ChangeNotifier {
   int get currentStep => _currentStep;
   ModulatedSignal? get modulatedSignal => _modulatedSignal;
   bool get hasResult => _modulatedSignal != null;
+
+  // Set the history provider
+  void setHistoryProvider(HistoryProvider provider) {
+    _historyProvider = provider;
+  }
 
   // Methods to update state
   void setInputText(String text) {
@@ -114,5 +123,16 @@ class ModulationProvider extends ChangeNotifier {
     _currentStep = 0;
     _modulatedSignal = null;
     notifyListeners();
+  }
+  
+  // Save the current modulation to history
+  Future<void> saveToHistory() async {
+    if (!hasResult || _historyProvider == null) return;
+
+    await _historyProvider!.saveModulation(
+      originalText: _inputText,
+      modulationType: _modulationType,
+      modulatedSignal: _modulatedSignal!,
+    );
   }
 }

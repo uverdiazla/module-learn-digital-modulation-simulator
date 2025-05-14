@@ -48,5 +48,84 @@
   "bpsk_description": "Binary Phase Shift Keying - Uses 2 phase states (0° and 180°) to represent binary 0 and 1",
   "qpsk_description": "Quadrature Phase Shift Keying - Uses 4 phase states (0°, 90°, 180°, 270°) to represent 2 bits per symbol",
   "ask_description": "Amplitude Shift Keying - Uses different amplitude levels to represent binary data, typically zero amplitude for bit 0 and non-zero for bit 1",
-  "fsk_description": "Frequency Shift Keying - Uses different frequency levels to represent binary data, typically low frequency for bit 0 and high frequency for bit 1"
+  "fsk_description": "Frequency Shift Keying - Uses different frequency levels to represent binary data, typically low frequency for bit 0 and high frequency for bit 1",
+  
+  "history": "History",
+  "historyEmpty": "No modulation history yet",
+  "historyEntry": "{timestamp} - {text} ({type})",
+  "@historyEntry": {
+    "placeholders": {
+      "timestamp": {},
+      "text": {},
+      "type": {}
+    }
+  },
+  "saveToHistory": "Save to History",
+  "deleteHistory": "Delete History",
+  "confirmDeleteHistory": "Are you sure you want to delete all history?",
+  "yes": "Yes",
+  "no": "No",
+  "cancel": "Cancel",
+  
+  "demodulation": "Demodulation",
+  "demodulationTitle": "Signal Demodulation",
+  "noiseLevel": "Noise Level",
+  "noiseDescription": "Adding noise simulates real-world transmission conditions",
+  "demodulate": "Demodulate",
+  "originalMessage": "Original Message",
+  "demodulatedMessage": "Demodulated Message",
+  "accuracy": "Accuracy",
+  "noiseImpact": "Noise Impact",
+  "errorRate": "Error Rate: {rate}%",
+  "@errorRate": {
+    "placeholders": {
+      "rate": {}
+    }
+  },
+  
+  "transmissionProcess": "Transmission Process",
+  "modulation": "Modulation",
+  "transmission": "Transmission",
+  "receivedSignal": "Received Signal",
+  "viewHistory": "View History",
+  "transmissionChannel": "Transmission Channel",
+  "channelNoise": "Channel Noise",
+  "lowNoise": "Low",
+  "mediumNoise": "Medium",
+  "highNoise": "High",
+  "extremeNoise": "Extreme",
+
+  "historyTitle": "Modulation History",
+  "noHistoryEntries": "No history entries yet. Modulate a signal and save it to history.",
+  "selectHistoryEntry": "Select a history entry to view details",
+  "clearAllHistory": "Clear All History",
+  "clearAllHistoryConfirmation": "Are you sure you want to delete all history entries? This action cannot be undone.",
+  "delete": "Delete",
+  "clear": "Clear",
+  "deleteEntry": "Delete Entry",
+  "deleteEntryConfirmation": "Are you sure you want to delete this entry?",
+  "originalText": "Original Text",
+  "timestamp": "Timestamp",
+  "demodulatedText": "Demodulated Text",
+
+  "demodulationStepByStep": "Step-by-Step Demodulation",
+  "demodulationProgress": "Demodulation Progress: {progress}%",
+  "@demodulationProgress": {
+    "placeholders": {
+      "progress": {}
+    }
+  },
+  "demodulationComplete": "Demodulation Complete",
+  "demodulationStep": "Step {current} of {total}",
+  "@demodulationStep": {
+    "placeholders": {
+      "current": {},
+      "total": {}
+    }
+  },
+  "characterComparison": "Character Comparison",
+  "original": "Original",
+  "demodulated": "Demodulated",
+  "errors": "Errors",
+  "showComparison": "Show Comparison"
 }
